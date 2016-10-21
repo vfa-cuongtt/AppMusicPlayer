@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 const styles = require('../styles.js')
-const { StyleSheet, View,ActivityIndicatorIOS} = ReactNative;
+const { StyleSheet, View} = ReactNative;
 import {
     Container,
     Header,
@@ -18,6 +18,7 @@ import {
     Thumbnail,
     ListView,
     Text,
+    Spinner,
 } from 'native-base';
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 var RNFS = require('react-native-fs');
@@ -29,16 +30,15 @@ class ListItemView extends Component {
     RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
     .then((result) => {
       // Load file and push into array DATA
-      for (var i = 0; i < result.length; i++) {
+      for (var i = 0; i < 10; i++) {
         DATA.push(result[i]);
       }
 
       console.log('DATA',DATA);
       callback(DATA);
       this.setState({
-        //dataList:this.state.dataSource.cloneWithRows(DATA),
         items:  DATA,
-         isLoading: false
+        isLoading: false
       });
     })
     .catch((err) => {
@@ -60,7 +60,6 @@ class ListItemView extends Component {
     super(props);
 
     this.state = {
-      //dataSource : new ListView.DataSource({ rowHasChanged:(r1,r2) => r1 != r2 }),
       items:[],
       isLoading: true,
     };
@@ -72,7 +71,7 @@ class ListItemView extends Component {
     if(this.state.isLoading ) {
       return(
         (
-          <ActivityIndicatorIOS
+          <Spinner
             size='large' style={styles.container}/>
         )
       );
@@ -82,7 +81,7 @@ class ListItemView extends Component {
         <List dataArray={this.state.items} renderRow={(item) =>
             <ListItem button onPress={()=>this.setModalVisible(true, item)}  >
             <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
-              <Text>
+              <Text style={{fontWeight: '600', }}>
                 {item.name}
               </Text>
             </ListItem>
