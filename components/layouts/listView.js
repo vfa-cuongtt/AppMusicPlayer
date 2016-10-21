@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 const styles = require('../styles.js')
-const { StyleSheet, View} = ReactNative;
+const { StyleSheet, View,Navigator} = ReactNative;
 import {
     Container,
     Header,
@@ -47,22 +47,36 @@ class ListItemView extends Component {
     });
   }
 
-  setModalVisible(visible, x) {
-          this.setState({
-              modalVisible: visible,
-              selectedItem: x
+  setModalVisible(item) {
+
+        //  console.log('visible',visible);
+          console.log('item',item);
+
+          //this.pushData(item);
+
+          this.props.navigator.push({
+            id:'PlayView',
           });
-          console.log('visible',visible);
       }
+
+  pushData(item) {
+    console.log('pushData',item);
+    this.props.navigator.push({
+      id:'PlayView',
+    });
+  }
 
 
   constructor(props) {
     super(props);
-
+    console.log('navigator',navigator);
     this.state = {
       items:[],
       isLoading: true,
+      modalVisible: false,
+      selectedItem: undefined,
     };
+
     this.loadData(function(m_DATA){});
   }
 
@@ -79,13 +93,15 @@ class ListItemView extends Component {
     }else {
       return(
         <List dataArray={this.state.items} renderRow={(item) =>
-            <ListItem button onPress={()=>this.setModalVisible(true, item)}  >
+            <ListItem button onPress={this.setModalVisible.bind(this, item)}  >
             <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
               <Text style={{fontWeight: '600', }}>
                 {item.name}
               </Text>
             </ListItem>
         } />
+
+
       );
     }
   }

@@ -36,12 +36,10 @@ class HeaderView extends Component {
         </Header>
         <Content>
           <SearchView />
-          <ScrollableTabView
-            initialPage={0}
-            renderTabBar={() => <ScrollableTabBar />} >
-              <View tabLabel='List Song'>
-                  <ListItemView style={{flex:1}}/>
-              </View>
+          <ScrollableTabView >
+
+                  <ListItemView tabLabel='List Song' style={{flex:1}}/>
+
               <View tabLabel='Album'>
               </View>
               <View tabLabel='Singer'>

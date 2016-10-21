@@ -8,6 +8,10 @@ import {
 var styles = require('../styles.js');
 
 class PlayView extends Component {
+  constructor(props) {
+    super(props);
+    console.log('play View', this.props.songObject.name);
+  }
   render() {
     return(
       <View style={styles.toolBar}>
