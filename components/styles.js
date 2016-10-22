@@ -8,6 +8,19 @@ var styles = StyleSheet.create({
   header:{
     flex:1,
   },
+  mediaBtn:{
+    marginLeft: 28
+  },
+  mediaView:{
+    marginTop: 50,
+    flexDirection:'row',
+  },
+  imgPlayView:{
+    marginTop:50
+  },
+  songTitle:{
+    marginTop:20
+  }
 })
 
 module.exports = styles;

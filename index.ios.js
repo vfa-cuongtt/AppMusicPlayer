@@ -31,8 +31,11 @@ export default class AppMusicPlayer extends Component {
         );
       case 'PlayView':
         return (
+          // <PlayView navigator={navigator}
+          // songObject={route.passProps.songObject} />);
           <PlayView navigator={navigator}
-          songObject={route.passProps.songObject} />);
+            title='Music Player'
+          />);
         break;
       default:
     }
@@ -41,7 +44,7 @@ export default class AppMusicPlayer extends Component {
   render() {
     return (
       <Navigator
-        initialRoute={{id:'HomeView'}}
+        initialRoute={{id:'PlayView'}}
         renderScene={this.renderScene}
       />
     );
