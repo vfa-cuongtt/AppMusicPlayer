@@ -30,7 +30,7 @@ class ListItemView extends Component {
     RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
     .then((result) => {
       // Load file and push into array DATA
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < result.length; i++) {
         DATA.push(result[i]);
       }
 
@@ -49,15 +49,21 @@ class ListItemView extends Component {
 
   setModalVisible(item) {
 
-        //  console.log('visible',visible);
-          console.log('item',item);
+    //  console.log('visible',visible);
+    console.log('name: ', item.name);
+    var name= item.name;
+    var indexSong = DATA.findIndex(item => item.name == name);
+      console.log('item',DATA.findIndex(item => item.name == name));
+      console.log('All Item: ', DATA.length);
 
-          //this.pushData(item);
+      //this.pushData(item);
 
-          this.props.navigator.push({
-            id:'PlayView',
-          });
-      }
+      // this.props.navigator.push({
+      //   id:'PlayView',
+      //  listDATA: DATA,
+      //  indexSong: indexSong,
+      // });
+  }
 
   pushData(item) {
     console.log('pushData',item);
