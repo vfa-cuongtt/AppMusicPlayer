@@ -1,20 +1,42 @@
-import React, {Component} from "react";
+'use strict';
+import React, {Component} from 'react';
+import ReactNative from 'react-native';
+const styles = require('../styles.js')
+const { StyleSheet, View,Navigator} = ReactNative;
 import {
-  StyleSheet,
-  View,
-  Text,Image,
-  TouchableOpacity
-} from "react-native";
-var styles = require('../styles.js');
+    Container,
+    Header,
+    Title,
+    Content,
+    Footer,
+    FooterTab,
+    Button,
+    Icon ,
+    Tabs,
+    List,
+    ListItem,
+    Thumbnail,
+    ListView,
+    Text,
+    Spinner,
+} from 'native-base';
 
 class SplashView extends Component {
+  
   render() {
     return(
-      <View style={styles.toolBar}>
-        <Text>
-          splashView
-        </Text>
-      </View>
+      <Container>
+        <Header>
+            <Button transparent onPress={()=> {
+              this.props.navigator.push({
+                id:'HomeView',
+              })
+            }}>
+                <Icon name='ios-arrow-back' />
+            </Button>
+            <Title>{this.props.title}</Title>
+        </Header>
+      </Container>
     );
   }
 }

@@ -1,8 +1,8 @@
-'use strict';
+
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 const styles = require('../styles.js')
-const { StyleSheet, View,Navigator} = ReactNative;
+const { StyleSheet, View, Navigator} = ReactNative;
 import {
     Container,
     Header,
@@ -24,7 +24,8 @@ var ScrollableTabView = require('react-native-scrollable-tab-view');
 var RNFS = require('react-native-fs');
 var DATA = new Array();
 
-class ListItemView extends Component {
+export default class ListItemView extends Component {
+
   // load data from Bundle
   loadData(callback){
     RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
@@ -67,9 +68,9 @@ class ListItemView extends Component {
 
   pushData(item) {
     console.log('pushData',item);
-    this.props.navigator.push({
-      id:'PlayView',
-    });
+    // this.props.navigator.pops({
+    //   id:'PlayView',
+    // });
   }
 
 
@@ -86,6 +87,29 @@ class ListItemView extends Component {
     this.loadData(function(m_DATA){});
   }
 
+  renderRow() {
+    let rows = []
+
+    this.state.items.forEach((item,key) => {
+      rows.push(
+        <ListItem key={key} onPress={ () => {
+            this.props.navigator.push({
+              id:'PlayView'
+            })
+          }
+        }>
+        <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
+          <Text style={{fontWeight: '600', }}>
+            {item.name}
+          </Text>
+        </ListItem>
+      )
+    })
+    return (
+      <List>{ rows }</List>
+    )
+  }
+
   render() {
     console.log('render loading is  '+ this.state.isLoading);
     if(this.state.isLoading ) {
@@ -98,14 +122,9 @@ class ListItemView extends Component {
 
     }else {
       return(
-        <List dataArray={this.state.items} renderRow={(item) =>
-            <ListItem button onPress={this.setModalVisible.bind(this, item)}  >
-            <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
-              <Text style={{fontWeight: '600', }}>
-                {item.name}
-              </Text>
-            </ListItem>
-        } />
+        <View>
+          {this.renderRow()}
+        </View>
 
 
       );

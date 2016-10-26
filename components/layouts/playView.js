@@ -4,8 +4,8 @@ import {
   View,
   Text,Image,
   TouchableOpacity,
-  Navigator,ListView
-
+  Navigator,
+  ListView
 } from "react-native";
 import {
   Container,
@@ -25,12 +25,18 @@ import {
 } from 'native-base';
 var styles = require('../styles.js');
 var Sound = require('react-native-sound');
+var Slider = require('react-native-slider');
+
 var mp3;
 var selectPlay = true;
 var repeat = true;
 //var playList = new Array();
 
 var playList = [
+  {
+    name:'doorknockm_TOlojaF6.mp3',
+    path:'./mp3files/doorknockm_TOlojaF6.mp3'
+  },
   {
     name:'Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3',
     path:'./mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3'
@@ -61,6 +67,8 @@ var enumRewind = 'rewind';
 var enumPlay = 'play';
 var enumNext = 'next';
 var enumRandom = 'random';
+var enumRepeatOne = 'repeatOne';
+var enumRepeatAll = 'repeatAll';
 var enumKey;
 
 var indexSong;
@@ -74,48 +82,26 @@ class PlayView extends Component {
     // songTitle = this.props.listDATA[this.props.indexSong].name;
     // songPath = this.props.listDATA[this.props.indexSong].path;
     // Test start
+
     indexSong = 0;
     console.log('all Song ', playList.length - 1);
     allSong = playList.length - 1;
     //Test end
     this.state={
-      //songTitle:'Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3',
       // songTitle: songTitle,
       // songPath: songPath,
       songTitle: playList[indexSong].name,
       songPath: playList[indexSong].path,
+      //value: 0,
+      currentTime: 0,
+      duration: 0,
 
     };
     //console.log('path: ',this.props.songPath);
     // Test start
     //this.getSong();
     // Test end
-
-    // API play song
-    // mp3 = new Sound(this.props.songObject.path , '', (error) => {
-    //mp3 = new Sound('./mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3' ,Sound.MAIN_BUNDLE, (error) => {
-
-    // mp3 = new Sound('./mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3' ,Sound.MAIN_BUNDLE, (error) => {
-    //   if(error) {
-    //     console.log('Failed to load sound', error);
-    //   } else {
-    //     console.log('Load sound success');
-    //     console.log('duration in seconds: ' + mp3.getDuration() +
-    //    ' number of channels: ' + mp3.getNumberOfChannels());
-    //   }
-    // });
-
   }
-
-  // getSong(property) {
-  //   console.log('song Path: ', playList[5].path );
-  //   var title = playList[5].name;
-  //   var path = playList[5].path;
-  //   this.setState({
-  //     songTitle: title,
-  //     songPath: path,
-  //   });
-  // }
 
   loadSound(songPath) {
     mp3 = new Sound(songPath ,Sound.MAIN_BUNDLE, (error) => {
@@ -125,23 +111,14 @@ class PlayView extends Component {
       //   console.log('duration in seconds: ' + mp3.getDuration() +
       //  ' number of channels: ' + mp3.getNumberOfChannels());
        //this.playMp3();
+       this.setState({duration: mp3.getDuration()});
        this.checkPlay();
       }
     });
-    // switch (enumKey) {
-    //   case 'next':
-    //        console.log('asdas');
-    //
-    //
-    //    case 'rewind':
-    //        console.log('rewind ne ma');
-    //      break;
-    //     break;
-    //   default:
-    //
-    // }
-
   }
+
+
+
   //Test Enum start
   checkPlay() {
     switch (enumKey) {
@@ -169,29 +146,56 @@ class PlayView extends Component {
 
   }
   // Test enum end
+  checkTimer(){
+
+
+  }
+
 
   playMp3() {
 
-        //if(selectPlay) {
-          mp3.play(
-            (success) => {
-              if (success) {
-                console.log('successfully finished playing');
-                switch (enumKey) {
-                  case 'repeatOne':
-                    console.log('repeatOne bai hat');
-                    break;
-                  case 'repeatAll':
-                    console.log('repeatAll bai hat ');
-                    break;
-                  default:
-                }
-              } else {
-                console.log('playback failed due to audio decoding errors');
-              }
-            }
-          );
-            selectPlay = false;
+    //mp3.setCurrentTime();
+    console.log('duration: ', this.state.duration);
+//
+    console.log('state currentTime : ', this.state.currentTime);
+//
+
+     var timer = this.state.currentTime / this.state.duration;
+     this.setState({value: timer});
+
+// mp3.getCurrentTime = function(checkTimer) {
+//   console.log('33333333 ');
+//     RNSound.getCurrentTime(1, checkTimer);
+//
+// };
+
+//mp3.getCurrentTime((seconds) => console.log('at ' + seconds));
+
+    mp3.setCurrentTime(this.state.currentTime);
+
+    mp3.play(
+      (success) => {
+        if (success) {
+          console.log('successfully finished playing');
+          switch (enumKey) {
+            case 'repeatOne':
+              console.log('repeatOne bai hat');
+              mp3.setNumberOfLoops(-1);
+              mp3.play();
+              break;
+            case 'repeatAll':
+              console.log('repeatAll bai hat ');
+              this.nextSong();
+              break;
+            default:
+              this.nextSong();
+          }
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+      }
+    );
+      selectPlay = false;
           // } else {
           //   mp3.pause();
           //   selectPlay = true;
@@ -219,6 +223,8 @@ class PlayView extends Component {
 
     } else {
       mp3.pause();
+
+      mp3.getCurrentTime((seconds) => this.setState({currentTime: seconds}))
       selectPlay = true;
     }
 
@@ -255,15 +261,14 @@ class PlayView extends Component {
   repeatSong() {
     console.log('repeat');
     if(repeat) {
-        enumKey = 'repeatOne';
+      console.log('repeat 1 bai: ', mp3.getNumberOfLoops());
+        enumKey = enumRepeatOne;
         repeat = false;
     } else {
-      enumKey = 'repeatAll';
+      enumKey = enumRepeatAll;
       repeat = true;
-
     }
 
-    //
     // this.checkEnum();
   }
 
@@ -278,8 +283,8 @@ class PlayView extends Component {
     this.setState({
       songTitle: playList[indexSong].name,
       //songPath: playList[indexSong].path,
+      currentTime: 0,
     });
-
     console.log('songPath: ',playList[indexSong].path);
     mp3.pause();
     this.loadSound(playList[indexSong].path);
@@ -295,12 +300,11 @@ class PlayView extends Component {
     this.setState({
       songTitle: playList[indexSong].name,
       songPath: playList[indexSong].path,
+      currentTime: 0,
     });
     console.log('songPath: ',playList[indexSong].path);
     mp3.pause();
     this.loadSound(playList[indexSong].path);
-
-
   }
 
   // Function: Random Song
@@ -310,21 +314,20 @@ class PlayView extends Component {
     this.setState({
       songTitle: playList[indexSong].name,
       songPath: playList[indexSong].path,
+      currentTime: 0,
     });
     console.log('songPath: ',playList[indexSong].path);
     mp3.pause();
     this.loadSound(playList[indexSong].path);
-
-
-
-
   }
+
+
 
   render() {
     return(
       <Container>
         <Header>
-            <Button transparent onPress={this.navBackView}>
+            <Button transparent onPress={this.navBackView.bind(this)}>
                 <Icon name='ios-arrow-back' />
             </Button>
             <Title>{this.props.title}</Title>
@@ -336,7 +339,7 @@ class PlayView extends Component {
             </Text>
           </View>
           <View style={styles.imgPlayView}>
-            <Image source={require('../../img/cogi.jpg')} style={{marginLeft:13,width:350,height:350}}/>
+            <Image source={require('../../img/cogi.jpg')} style={styles.image}/>
           </View>
 
           <View style={styles.mediaView}>

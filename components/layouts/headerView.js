@@ -29,9 +29,13 @@ class HeaderView extends Component {
     return(
       <Container>
         <Header>
-              <Button transparent>
-                  <Icon name='ios-arrow-back' />
-              </Button>
+        <Button transparent onPress={()=> {
+          this.props.navigator.push({
+            id:'HomeView',
+          })
+        }}>
+            <Icon name='ios-arrow-back' />
+        </Button>
               <Title>{this.props.title}</Title>
         </Header>
         <Content>
