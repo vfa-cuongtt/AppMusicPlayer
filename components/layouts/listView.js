@@ -25,6 +25,17 @@ var RNFS = require('react-native-fs');
 var DATA = new Array();
 
 export default class ListItemView extends Component {
+  constructor(props) {
+    super(props);
+    console.log('navigator',navigator);
+    this.state = {
+      items:[],
+      isLoading: true,
+      modalVisible: false,
+      selectedItem: undefined,
+    };
+    this.loadData(function(m_DATA){});
+  }
 
   // load data from Bundle
   loadData(callback){
@@ -74,41 +85,30 @@ export default class ListItemView extends Component {
   }
 
 
-  constructor(props) {
-    super(props);
-    console.log('navigator',navigator);
-    this.state = {
-      items:[],
-      isLoading: true,
-      modalVisible: false,
-      selectedItem: undefined,
-    };
 
-    this.loadData(function(m_DATA){});
-  }
 
-  renderRow() {
-    let rows = []
-
-    this.state.items.forEach((item,key) => {
-      rows.push(
-        <ListItem key={key} onPress={ () => {
-            this.props.navigator.push({
-              id:'PlayView'
-            })
-          }
-        }>
-        <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
-          <Text style={{fontWeight: '600', }}>
-            {item.name}
-          </Text>
-        </ListItem>
-      )
-    })
-    return (
-      <List>{ rows }</List>
-    )
-  }
+  // renderRow() {
+  //   let rows = []
+  //
+  //   this.state.items.forEach((item,key) => {
+  //     rows.push(
+  //       <ListItem key={key} onPress={ () => {
+  //           this.props.navigator.push({
+  //             id:'PlayView'
+  //           })
+  //         }
+  //       }>
+  //       <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
+  //         <Text style={{fontWeight: '600', }}>
+  //           {item.name}
+  //         </Text>
+  //       </ListItem>
+  //     )
+  //   })
+  //   return (
+  //     <List>{ rows }</List>
+  //   )
+  // }
 
   render() {
     console.log('render loading is  '+ this.state.isLoading);
@@ -122,9 +122,15 @@ export default class ListItemView extends Component {
 
     }else {
       return(
-        <View>
-          {this.renderRow()}
-        </View>
+        <List dataArray={this.state.items} renderRow={(item) =>
+          <ListItem button onPress={this.setModalVisible.bind(this, item)}  >
+          <Thumbnail square size={80} source={{uri: 'http://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg'}} />
+            <Text style={{fontWeight: '600', }}>
+              {item.name}
+            </Text>
+          </ListItem>
+        } />
+
 
 
       );

@@ -21,15 +21,14 @@ import {
 } from 'native-base';
 //var ScrollableTabView = require('react-native-scrollable-tab-view');
 import ScrollableTabView, {ScrollableTabBar } from 'react-native-scrollable-tab-view';
-23
 var ListItemView = require('./listView.js');
-//import ListItemView from './listView.js';
 var SearchView = require('./searchView.js');
 
 class HomeView extends Component {
 
   constructor(props) {
     super(props);
+    console.log('props: ', props);
   }
   render() {
     return(
@@ -48,13 +47,12 @@ class HomeView extends Component {
           <SearchView />
           <ScrollableTabView >
 
-                  <ListItemView tabLabel='List Song' style={{flex:1}} 
-                  />
+            <ListItemView navigator={navigator} tabLabel='List Song' style={{flex:1}} />
 
-              <View tabLabel='Album'>
-              </View>
-              <View tabLabel='Singer'>
-              </View>
+            <View tabLabel='Album'>
+            </View>
+            <View tabLabel='Singer'>
+            </View>
           </ScrollableTabView>
         </Content>
       </Container>

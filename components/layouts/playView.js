@@ -32,37 +32,38 @@ var selectPlay = true;
 var repeat = true;
 //var playList = new Array();
 
-var playList = [
-  {
-    name:'doorknockm_TOlojaF6.mp3',
-    path:'./mp3files/doorknockm_TOlojaF6.mp3'
-  },
-  {
-    name:'Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3',
-    path:'./mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3'
-  },
-  {
-    name:'Anh Cu Di Di.mp3',
-    path:'./mp3files/Anh Cu Di Di.mp3'
-  },
-  {
-    name:'Co Khi Nao Roi Xa - Bich Phuong [MP3 128kbps].mp3',
-    path:'./mp3files/Co Khi Nao Roi Xa - Bich Phuong [MP3 128kbps].mp3'
-  },
-  {
-    name:'Gat Di Nuoc Mat - Noo Phuoc Thinh_ Tonny [MP3 128kbps].mp3',
-    path:'./mp3files/Gat Di Nuoc Mat - Noo Phuoc Thinh_ Tonny [MP3 128kbps].mp3'
-  },
-  {
-    name:'Gui Anh Xa Nho - Bich Phuong [MP3 128kbps].mp3',
-    path:'./mp3files/Gui Anh Xa Nho - Bich Phuong [MP3 128kbps].mp3'
-  },
-  {
-    name:'Guong Mat la Lam.mp3',
-    path:'./mp3files/Guong Mat la Lam.mp3'
-  },
-];
+// var playList = [
+//   {
+//     name:'doorknockm_TOlojaF6.mp3',
+//     path:'./mp3files/doorknockm_TOlojaF6.mp3'
+//   },
+//   {
+//     name:'Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3',
+//     path:'./mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3'
+//   },
+//   {
+//     name:'Anh Cu Di Di.mp3',
+//     path:'./mp3files/Anh Cu Di Di.mp3'
+//   },
+//   {
+//     name:'Co Khi Nao Roi Xa - Bich Phuong [MP3 128kbps].mp3',
+//     path:'./mp3files/Co Khi Nao Roi Xa - Bich Phuong [MP3 128kbps].mp3'
+//   },
+//   {
+//     name:'Gat Di Nuoc Mat - Noo Phuoc Thinh_ Tonny [MP3 128kbps].mp3',
+//     path:'./mp3files/Gat Di Nuoc Mat - Noo Phuoc Thinh_ Tonny [MP3 128kbps].mp3'
+//   },
+//   {
+//     name:'Gui Anh Xa Nho - Bich Phuong [MP3 128kbps].mp3',
+//     path:'./mp3files/Gui Anh Xa Nho - Bich Phuong [MP3 128kbps].mp3'
+//   },
+//   {
+//     name:'Guong Mat la Lam.mp3',
+//     path:'./mp3files/Guong Mat la Lam.mp3'
+//   },
+// ];
 
+var playList = [];
 var enumRewind = 'rewind';
 var enumPlay = 'play';
 var enumNext = 'next';
@@ -83,10 +84,15 @@ class PlayView extends Component {
     // songPath = this.props.listDATA[this.props.indexSong].path;
     // Test start
 
-    indexSong = 0;
-    console.log('all Song ', playList.length - 1);
+    playList = this.props.items;
+    indexSong = this.props.indexSong;
+
+    // console.log('all Song ', playList.length - 1);
+    console.log('all Song ', this.props.items.length - 1);
     allSong = playList.length - 1;
+    //allSong = this.props.items.length - 1;
     //Test end
+    console.log('path: ', playList[indexSong].path);
     this.state={
       // songTitle: songTitle,
       // songPath: songPath,
@@ -97,14 +103,18 @@ class PlayView extends Component {
       duration: 0,
 
     };
+
+
     //console.log('path: ',this.props.songPath);
     // Test start
     //this.getSong();
     // Test end
   }
 
+
+
   loadSound(songPath) {
-    mp3 = new Sound(songPath ,Sound.MAIN_BUNDLE, (error) => {
+    mp3 = new Sound(songPath ,'', (error) => {
       if(error) {
         console.log('Failed to load sound', error);
       } else {
@@ -261,11 +271,12 @@ class PlayView extends Component {
   repeatSong() {
     console.log('repeat');
     if(repeat) {
-      console.log('repeat 1 bai: ', mp3.getNumberOfLoops());
+      console.log('repeat 1 bai: ');
         enumKey = enumRepeatOne;
         repeat = false;
     } else {
       enumKey = enumRepeatAll;
+      console.log('repeat all bai: ');
       repeat = true;
     }
 

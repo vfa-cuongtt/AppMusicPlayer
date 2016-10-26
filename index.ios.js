@@ -14,8 +14,9 @@ import {
 
 var styles = require('./components/styles.js');
 import SplashView from './components/layouts/splashView.js';
-import HomeView from './components/layouts/homeView.js'
+//import HomeView from './components/layouts/homeView.js'
 import PlayView from './components/layouts/playView.js';
+import TestHomeView from './components/layouts/TestHomeView.js'
 
 export default class AppMusicPlayer extends Component {
   renderScene(route,navigator){
@@ -25,20 +26,25 @@ export default class AppMusicPlayer extends Component {
         return (
           <SplashView navigator={navigator}
         />);
-      case 'HomeView':
-        return (
-          <HomeView navigator={navigator}
-          title='Music Player'
-        />);
+      // case 'HomeView':
+      //   return (
+      //     <HomeView navigator={navigator}
+      //     title='Music Player'
+      //   />);
       case 'PlayView':
         return (
           // <PlayView navigator={navigator}
           // songObject={route.passProps.songObject} />);
-          <PlayView navigator={navigator}
-            title='Music Player'
+          <PlayView navigator = {navigator}
+            title = 'Music Player'
+            items = {route.passProps.items}
+            indexSong = {route.passProps.indexSong}
           />);
-
-
+      case 'TestHomeView':
+        return (
+          <TestHomeView navigator={navigator}
+          title='Music Player'
+        />);
         break;
       default:
     }
@@ -47,7 +53,7 @@ export default class AppMusicPlayer extends Component {
   render() {
     return (
       <Navigator
-        initialRoute={{id:'HomeView'}}
+        initialRoute={{id:'TestHomeView'}}
         renderScene={this.renderScene}
       />
     );
