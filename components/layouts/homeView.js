@@ -34,14 +34,8 @@ class HomeView extends Component {
     return(
       <Container>
         <Header>
-        <Button transparent onPress={()=> {
-          this.props.navigator.push({
-            id:'PlayView',
-          })
-        }}>
-            <Icon name='ios-arrow-back' />
-        </Button>
-              <Title>{this.props.title}</Title>
+
+          <Title>{this.props.title}</Title>
         </Header>
         <Content>
           <SearchView />
