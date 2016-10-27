@@ -28,7 +28,7 @@ var Sound = require('react-native-sound');
 var Slider = require('react-native-slider');
 
 var mp3;
-var selectPlay = true;
+var isPlaying = true;
 var repeat = true;
 //var playList = new Array();
 
@@ -101,14 +101,16 @@ class PlayView extends Component {
       //value: 0,
       currentTime: 0,
       duration: 0,
-
+      repeatIcon: require('../../img/icon/repeatAllIcon.png'),
+      previousIcon: require('../../img/icon/previousIcon.png'),
+      playIcon: require('../../img/icon/playIcon.png'),
+      arrowsIcon: require('../../img/icon/arrowsIcon.png'),
+      shuffleIcon: require('../../img/icon/shuffleIcon.png'),
     };
-
-
-    //console.log('path: ',this.props.songPath);
-    // Test start
-    //this.getSong();
-    // Test end
+    console.log('isPlaying', this.props.isPlaying);
+    if(this.props.isPlaying) {
+        this.playSong();
+    }
   }
 
 
@@ -127,9 +129,7 @@ class PlayView extends Component {
     });
   }
 
-
-
-  //Test Enum start
+  //Check Enum
   checkPlay() {
     switch (enumKey) {
       case 'rewind':
@@ -151,35 +151,22 @@ class PlayView extends Component {
         this.playMp3();
         break;
       default:
-
     }
-
   }
-  // Test enum end
-  checkTimer(){
-
-
-  }
-
 
   playMp3() {
-
     //mp3.setCurrentTime();
     console.log('duration: ', this.state.duration);
-//
     console.log('state currentTime : ', this.state.currentTime);
-//
-
      var timer = this.state.currentTime / this.state.duration;
      this.setState({value: timer});
 
-// mp3.getCurrentTime = function(checkTimer) {
-//   console.log('33333333 ');
-//     RNSound.getCurrentTime(1, checkTimer);
-//
-// };
-
-//mp3.getCurrentTime((seconds) => console.log('at ' + seconds));
+    // mp3.getCurrentTime = function(checkTimer) {
+    //   console.log('33333333 ');
+    //     RNSound.getCurrentTime(1, checkTimer);
+    //
+    // };
+    //mp3.getCurrentTime((seconds) => console.log('at ' + seconds));
 
     mp3.setCurrentTime(this.state.currentTime);
 
@@ -205,19 +192,11 @@ class PlayView extends Component {
         }
       }
     );
-      selectPlay = false;
-          // } else {
-          //   mp3.pause();
-          //   selectPlay = true;
-          // }
-
-      // this.setState({
-      //   imgPlay:require('../images/icon/pause@2x.png')
-      // });
-
-  }
+  isPlaying = false;
+}
 
   navBackView() {
+    mp3.stop();
     this.props.navigator.pop({
       id:'HomeView',
     })
@@ -227,15 +206,19 @@ class PlayView extends Component {
     console.log('play');
     enumKey = enumPlay;
     //path = './mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3';
-    if(selectPlay) {
-      selectPlay = true;
+    if(isPlaying) {
       this.loadSound(this.state.songPath);
-
+      this.setState({
+        playIcon: require('../../img/icon/playIcon.png')
+      });
+      isPlaying = false;
     } else {
       mp3.pause();
-
+      this.setState({
+        playIcon: require('../../img/icon/pauseIcon.png')
+      });
       mp3.getCurrentTime((seconds) => this.setState({currentTime: seconds}))
-      selectPlay = true;
+      isPlaying = true;
     }
 
       //   if(selectPlay) {
@@ -265,8 +248,6 @@ class PlayView extends Component {
       // }
     }
 
-
-
   //Function: Repeat Song
   repeatSong() {
     console.log('repeat');
@@ -274,13 +255,17 @@ class PlayView extends Component {
       console.log('repeat 1 bai: ');
         enumKey = enumRepeatOne;
         repeat = false;
+        this.setState({
+          repeatIcon: require('../../img/icon/repeatOneIcon.png')
+        });
     } else {
       enumKey = enumRepeatAll;
       console.log('repeat all bai: ');
       repeat = true;
+      this.setState({
+        repeatIcon: require('../../img/icon/repeatAllIcon.png')
+      });
     }
-
-    // this.checkEnum();
   }
 
   // Function: Rewind Song
@@ -332,8 +317,6 @@ class PlayView extends Component {
     this.loadSound(playList[indexSong].path);
   }
 
-
-
   render() {
     return(
       <Container>
@@ -344,67 +327,66 @@ class PlayView extends Component {
             <Title>{this.props.title}</Title>
         </Header>
         <Content>
-          <View style={styles.songTitle}>
-            <Text>
-              {this.state.songTitle}
-            </Text>
-          </View>
-          <View style={styles.imgPlayView}>
-            <Image source={require('../../img/cogi.jpg')} style={styles.image}/>
-          </View>
-
-          <View style={styles.mediaView}>
-            <View style={styles.mediaBtn}>
-            <TouchableOpacity onPress={this.repeatSong.bind(this)} >
-              <Text>
-                Repeat
-              </Text>
-            </TouchableOpacity>
-            </View>
-
-            <View style={styles.mediaBtn}>
-              <TouchableOpacity onPress={this.rewindSong.bind(this)} >
+          <View>
+              <View style={styles.songTitle}>
                 <Text>
-                  Rewind
+                  {this.state.songTitle}
                 </Text>
-              </TouchableOpacity>
+              </View>
+              <View style={styles.imgPlayView}>
+                <Image source={require('../../img/cogi.jpg')} style={styles.image}/>
+              </View>
+
+              <View style={styles.mediaView}>
+                <View style={styles.mediaBtn}>
+                <TouchableOpacity onPress={this.repeatSong.bind(this)} >
+                <Image
+                  style={{width:30,height:30}}
+                  source={this.state.repeatIcon}
+                />
+                </TouchableOpacity>
+                </View>
+
+                <View style={styles.mediaBtn}>
+                  <TouchableOpacity onPress={this.rewindSong.bind(this)} >
+                  <Image
+                    style={{width:30,height:30}}
+                    source={this.state.previousIcon}
+                  />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.mediaBtn}>
+                  <TouchableOpacity onPress={this.playSong.bind(this)}>
+                  <Image
+                    style={{width:30,height:30}}
+                    source={this.state.playIcon}
+                  />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.mediaBtn}>
+                  <TouchableOpacity onPress={this.nextSong.bind(this)}>
+                  <Image
+                    style={{width:30,height:30}}
+                    source={this.state.arrowsIcon}
+                  />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.mediaBtn}>
+                  <TouchableOpacity onPress={this.randomSong.bind(this)}>
+                  <Image
+                    style={{width:30,height:30}}
+                    source={this.state.shuffleIcon}
+                  />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
             </View>
-
-            <View style={styles.mediaBtn}>
-              <TouchableOpacity onPress={this.playSong.bind(this)}>
-                <Text>
-                  Play
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.mediaBtn}>
-              <TouchableOpacity onPress={this.nextSong.bind(this)}>
-                <Text>
-                  Next
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.mediaBtn}>
-              <TouchableOpacity onPress={this.randomSong.bind(this)}>
-              <Text>
-                Random
-              </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-
         </Content>
-
-
       </Container>
-
-
-
-
-
     );
   }
 }

@@ -35,6 +35,7 @@
 		BC1E52881DB8B131003746C2 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC1E52871DB8B113003746C2 /* libRNFS.a */; };
 		BC1E52CE1DB8BE1D003746C2 /* mp3files in Resources */ = {isa = PBXBuildFile; fileRef = BC1E52CD1DB8BE1D003746C2 /* mp3files */; };
 		BC7136AC1DB8ADFD0075A3C5 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC7136AB1DB8ADDC0075A3C5 /* libRNSound.a */; };
+		BCD3CB351DC1F37D00A8BEA6 /* libRNMediaMeta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD3CB321DC1F35400A8BEA6 /* libRNMediaMeta.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +137,13 @@
 			remoteGlobalIDString = 19825A1E1BD4A89800EE0337;
 			remoteInfo = RNSound;
 		};
+		BCD3CB311DC1F35400A8BEA6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCD3CB221DC1F35300A8BEA6 /* RNMediaMeta.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNMediaMeta;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -171,6 +179,7 @@
 		BC1E52821DB8B112003746C2 /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		BC1E52CD1DB8BE1D003746C2 /* mp3files */ = {isa = PBXFileReference; lastKnownFileType = folder; path = mp3files; sourceTree = "<group>"; };
 		BC71369C1DB8ADDC0075A3C5 /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
+		BCD3CB221DC1F35300A8BEA6 /* RNMediaMeta.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNMediaMeta.xcodeproj; path = "../node_modules/react-native-media-meta/ios/RNMediaMeta.xcodeproj"; sourceTree = "<group>"; };
 		C7895D7227224ACE80149986 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		E5B3B62AD5C44779A0AA33EA /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -188,6 +197,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCD3CB351DC1F37D00A8BEA6 /* libRNMediaMeta.a in Frameworks */,
 				BC1E52881DB8B131003746C2 /* libRNFS.a in Frameworks */,
 				BC7136AC1DB8ADFD0075A3C5 /* libRNSound.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -328,6 +338,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				BCD3CB221DC1F35300A8BEA6 /* RNMediaMeta.xcodeproj */,
 				BC1E52821DB8B112003746C2 /* RNFS.xcodeproj */,
 				BC71369C1DB8ADDC0075A3C5 /* RNSound.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -396,6 +407,14 @@
 			isa = PBXGroup;
 			children = (
 				BC7136AB1DB8ADDC0075A3C5 /* libRNSound.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BCD3CB231DC1F35300A8BEA6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BCD3CB321DC1F35400A8BEA6 /* libRNMediaMeta.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -515,6 +534,10 @@
 					ProjectRef = BC1E52821DB8B112003746C2 /* RNFS.xcodeproj */;
 				},
 				{
+					ProductGroup = BCD3CB231DC1F35300A8BEA6 /* Products */;
+					ProjectRef = BCD3CB221DC1F35300A8BEA6 /* RNMediaMeta.xcodeproj */;
+				},
+				{
 					ProductGroup = BC71369D1DB8ADDC0075A3C5 /* Products */;
 					ProjectRef = BC71369C1DB8ADDC0075A3C5 /* RNSound.xcodeproj */;
 				},
@@ -621,6 +644,13 @@
 			fileType = archive.ar;
 			path = libRNSound.a;
 			remoteRef = BC7136AA1DB8ADDC0075A3C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BCD3CB321DC1F35400A8BEA6 /* libRNMediaMeta.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNMediaMeta.a;
+			remoteRef = BCD3CB311DC1F35400A8BEA6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

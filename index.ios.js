@@ -39,11 +39,13 @@ export default class AppMusicPlayer extends Component {
             title = 'Music Player'
             items = {route.passProps.items}
             indexSong = {route.passProps.indexSong}
+            isPlaying = {route.passProps.isPlaying}
           />);
       case 'TestHomeView':
         return (
           <TestHomeView navigator={navigator}
           title='Music Player'
+          
         />);
         break;
       default:

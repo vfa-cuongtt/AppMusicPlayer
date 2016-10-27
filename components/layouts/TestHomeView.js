@@ -23,16 +23,16 @@ import {
 import ScrollableTabView, {ScrollableTabBar } from 'react-native-scrollable-tab-view';
 var ListItemView = require('./listView.js');
 var SearchView = require('./searchView.js');
-// Test Start
 var RNFS = require('react-native-fs');
+import MediaMeta from 'react-native-media-meta';
 var DATA = new Array();
 
-// Test End
 class TestHomeView extends Component {
 
   constructor(props) {
     super(props);
     console.log('navigator',navigator);
+    this.arrtest = '';
     this.state = {
       items:[],
       isLoading: true,
@@ -40,20 +40,49 @@ class TestHomeView extends Component {
       selectedItem: undefined,
 
     };
-
     this.loadData(function(m_DATA){});
+    this.getMetaData();
   }
-
 
   // load data from Bundle
   loadData(callback){
     RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
     .then((result) => {
       // Load file and push into array DATA
-      for (var i = 0; i < result.length; i++) {
-        DATA.push(result[i]);
-      }
 
+      for (var i = 0; i < result.length; i++) {
+
+        // MediaMeta.get(result[i].path).then(resultMeta => {DATA.push(resultMeta)})
+        //   .catch(e => console.error(e)
+        //
+        // );
+        var arr = async(url) => {
+        try {
+           return await MediaMeta.get(url);
+
+
+        } catch (e) {
+
+        } finally {
+
+        }
+      };
+        result[i].metaObj = arr(result[i].path);
+        DATA.push(result[i]);
+
+      }
+      console.log('DATA: ', DATA);
+      // cho get data
+      // DATA[1].metaObj.then(function(test){
+      //     console.log('albumName: ', test.artist);
+      // })
+      //console.log('albumName: ', DATA[0].metaObj);
+      for (var i = 0 ; i < DATA.length ; i++) {
+        DATA[i].metaObj.then(function(test){
+            console.log('albumName: ', test);
+            DATA.push(test);
+        })
+      }
 
       callback(DATA);
       this.setState({
@@ -65,6 +94,11 @@ class TestHomeView extends Component {
       console.log(err.message, err.code);
       return false;
     });
+  }
+
+  getMetaData() {
+
+    console.log('getMetaData: ', this.state.items.albumName);
   }
 
   setModalVisible(item) {
@@ -83,12 +117,16 @@ class TestHomeView extends Component {
         passProps:{
           items: this.state.items,
           indexSong: indexSong,
+          isPlaying: true
         },
 
       });
   }
 
   render() {
+    // MediaMeta.get(savePath)
+    //   .then(result => {})
+    //   .catch(e => console.error(e));
     return(
       <Container>
         <Header>
