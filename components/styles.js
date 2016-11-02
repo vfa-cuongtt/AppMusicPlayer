@@ -3,18 +3,24 @@ const {StyleSheet} = React
 
 var styles = StyleSheet.create({
   container:{
+    alignItems: 'center',
     flex:1,
   },
   header:{
     flex:1,
   },
-  mediaBtn:{
-    marginLeft: 20
+  btnIcon:{
+    width:30,height:30      
+    //alignItems: 'center',
   },
   mediaView:{
-    marginTop: 50,
+    marginTop: 30,
     flexDirection:'row',
     alignItems: 'center',
+    flex: 1,
+    justifyContent: 'space-between',
+    marginLeft: 20,
+    marginRight: 20,
   },
   imgPlayView:{
     marginTop: 30,
@@ -25,8 +31,11 @@ var styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     marginRight: 20,
-    height: 30
-
+    height: 30,
+  },
+  titleText: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   image:{
     height: 250,

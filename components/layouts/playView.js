@@ -30,38 +30,6 @@ var Slider = require('react-native-slider');
 var mp3;
 var isPlaying = true;
 var repeat = true;
-//var playList = new Array();
-
-// var playList = [
-//   {
-//     name:'doorknockm_TOlojaF6.mp3',
-//     path:'./mp3files/doorknockm_TOlojaF6.mp3'
-//   },
-//   {
-//     name:'Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3',
-//     path:'./mp3files/Cause I Love You - Noo Phuoc Thinh [MP3 128kbps].mp3'
-//   },
-//   {
-//     name:'Anh Cu Di Di.mp3',
-//     path:'./mp3files/Anh Cu Di Di.mp3'
-//   },
-//   {
-//     name:'Co Khi Nao Roi Xa - Bich Phuong [MP3 128kbps].mp3',
-//     path:'./mp3files/Co Khi Nao Roi Xa - Bich Phuong [MP3 128kbps].mp3'
-//   },
-//   {
-//     name:'Gat Di Nuoc Mat - Noo Phuoc Thinh_ Tonny [MP3 128kbps].mp3',
-//     path:'./mp3files/Gat Di Nuoc Mat - Noo Phuoc Thinh_ Tonny [MP3 128kbps].mp3'
-//   },
-//   {
-//     name:'Gui Anh Xa Nho - Bich Phuong [MP3 128kbps].mp3',
-//     path:'./mp3files/Gui Anh Xa Nho - Bich Phuong [MP3 128kbps].mp3'
-//   },
-//   {
-//     name:'Guong Mat la Lam.mp3',
-//     path:'./mp3files/Guong Mat la Lam.mp3'
-//   },
-// ];
 
 var playList = [];
 var enumRewind = 'rewind';
@@ -87,12 +55,11 @@ class PlayView extends Component {
     playList = this.props.items;
     indexSong = this.props.indexSong;
 
-    // console.log('all Song ', playList.length - 1);
-    console.log('all Song ', this.props.items.length - 1);
+  //  console.log('playList[indexSong].path', playList[indexSong].path);
     allSong = playList.length - 1;
     //allSong = this.props.items.length - 1;
     //Test end
-    console.log('path: ', playList[indexSong].path);
+    //console.log('path: ', playList[indexSong].path);
     this.state={
       // songTitle: songTitle,
       // songPath: songPath,
@@ -329,7 +296,7 @@ class PlayView extends Component {
         <Content>
           <View>
               <View style={styles.songTitle}>
-                <Text>
+                <Text style={styles.titleText}>
                   {this.state.songTitle}
                 </Text>
               </View>
@@ -341,7 +308,7 @@ class PlayView extends Component {
                 <View style={styles.mediaBtn}>
                 <TouchableOpacity onPress={this.repeatSong.bind(this)} >
                 <Image
-                  style={{width:30,height:30}}
+                  style={styles.btnIcon}
                   source={this.state.repeatIcon}
                 />
                 </TouchableOpacity>
@@ -350,7 +317,7 @@ class PlayView extends Component {
                 <View style={styles.mediaBtn}>
                   <TouchableOpacity onPress={this.rewindSong.bind(this)} >
                   <Image
-                    style={{width:30,height:30}}
+                    style={styles.btnIcon}
                     source={this.state.previousIcon}
                   />
                   </TouchableOpacity>
@@ -359,7 +326,7 @@ class PlayView extends Component {
                 <View style={styles.mediaBtn}>
                   <TouchableOpacity onPress={this.playSong.bind(this)}>
                   <Image
-                    style={{width:30,height:30}}
+                    style={styles.btnIcon}
                     source={this.state.playIcon}
                   />
                   </TouchableOpacity>
@@ -368,7 +335,7 @@ class PlayView extends Component {
                 <View style={styles.mediaBtn}>
                   <TouchableOpacity onPress={this.nextSong.bind(this)}>
                   <Image
-                    style={{width:30,height:30}}
+                    style={styles.btnIcon}
                     source={this.state.arrowsIcon}
                   />
                   </TouchableOpacity>
@@ -377,7 +344,7 @@ class PlayView extends Component {
                 <View style={styles.mediaBtn}>
                   <TouchableOpacity onPress={this.randomSong.bind(this)}>
                   <Image
-                    style={{width:30,height:30}}
+                    style={styles.btnIcon}
                     source={this.state.shuffleIcon}
                   />
                   </TouchableOpacity>

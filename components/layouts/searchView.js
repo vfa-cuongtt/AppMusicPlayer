@@ -31,21 +31,29 @@ class SearchView extends Component {
     this.state = {
       search: '',
     };
+
+    console.log('props', this.props.dataArray);
   }
   search(){
     this.setState({
       isLoading: true,
     });
+    console.log('search:  ', this.state.search);
+
   }
   render() {
     return(
-      <InputGroup>
-          <Icon name="ios-search" />
-          <Input
-            placeholder="Search" value={this.state.search}
-            onChangeText={(text) => this.setState({search:text})}
-            onSubmitEditing={()=>this.search()}/>
-      </InputGroup>
+      <View>
+        <InputGroup>
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Search" value={this.state.search}
+              onChangeText={(text) => this.setState({search:text})}
+              onSubmitEditing={()=>this.search()}/>
+        </InputGroup>
+
+      </View>
+
 
     );
   }

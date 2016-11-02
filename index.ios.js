@@ -45,8 +45,8 @@ export default class AppMusicPlayer extends Component {
         return (
           <TestHomeView navigator={navigator}
           title='Music Player'
-          
         />);
+    
         break;
       default:
     }
