@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 const styles = require('../styles.js')
-const { StyleSheet, Text, View} = ReactNative;
+const { StyleSheet, Text, View,Alert} = ReactNative;
 import {
   Container,
   Header,
@@ -117,7 +117,6 @@ class TestHomeView extends Component {
           indexSong: indexSong,
           isPlaying: true
         },
-
       });
   }
 
@@ -144,20 +143,21 @@ search() {
 
 
       if(keyName.indexOf(keySearch)!==-1) {
-
         console.log('=== Tim duoc roi ====',);
         console.log( DATA[i].name);
-
         DataSearch.push(DATA[i]);
-
         this.setState({
           items: DataSearch,
-
           isLoading: false
         });
-
+      } else {
+        Alert.alert('Error','The song does not exist');
+        this.setState({
+          items:  DATA,
+          isLoading: false
+        });
+        break;
       }
-
     }
 
   } else {
