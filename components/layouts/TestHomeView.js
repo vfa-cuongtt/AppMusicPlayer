@@ -26,7 +26,8 @@ var SearchView = require('./searchView.js');
 var RNFS = require('react-native-fs');
 import MediaMeta from 'react-native-media-meta';
 var DATA = new Array();
-var DataSearch = new Array();
+var MetaData = new Array();
+var NewData = new Array();
 var myThumb;
 class TestHomeView extends Component {
 
@@ -47,16 +48,11 @@ class TestHomeView extends Component {
 
   // load data from Bundle
   loadData(callback){
-    RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
+   RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
     .then((result) => {
       // Load file and push into array DATA
-
+      console.log('MainBundlePath ',result);
       for (var i = 0; i < result.length; i++) {
-
-        // MediaMeta.get(result[i].path).then(resultMeta => {DATA.push(resultMeta)})
-        //   .catch(e => console.error(e)
-        //
-        // );
         var arr = async(url) => {
           try {
              return await MediaMeta.get(url);
@@ -65,23 +61,47 @@ class TestHomeView extends Component {
             return ;
           }
         };
-        result[i].metaTag = arr(result[i].path);
+        MetaData.push(arr(result[i].path));
         DATA.push(result[i]);
       }
       console.log('DATA: ', DATA);
+      console.log('MetaData: ', MetaData);
       // cho get data
       // DATA[1].metaObj.then(function(test){
       //     console.log('albumName: ', test.artist);
       // })
       //console.log('albumName: ', DATA[0].metaObj);
 
-      for (var i = 0 ; i < DATA.length ; i++) {
-         DATA[i].metaTag.then(function(test){
-             console.log('albumName: ', test);
-            //DATA[i].push(test);
-            //DataSearch.push(test);
-        })
+      // for (var i = 0 ; i < DATA.length ; i++) {
+      //    DATA[i].metaTag.then(function(test){
+      //        console.log('albumName: ', test);
+      //       //DATA[i].push(test);
+      //       //DataSearch.push(test);
+      //   })
+      // }
+
+
+      for (var i = 0; i < MetaData.length; i++) {
+          MetaData[i].then(function(metaResult) {
+            metaResult['path']= DATA[i].path;
+            metaResult['name']= DATA[i].name;
+              NewData.push(metaResult);
+
+          });
       }
+
+      for (var i = 0; i < NewData.length; i++) {
+
+
+      }
+
+      console.log('NewData: '+NewData);
+
+
+
+
+
+
       callback(DATA);
       this.setState({
         items:  DATA,
@@ -96,7 +116,7 @@ class TestHomeView extends Component {
   }
 
   getMetaData() {
-    console.log('getMetaData: ', this.DataSearch);
+
   }
 
   setModalVisible(item) {
@@ -170,9 +190,6 @@ search() {
 
 
   render() {
-    if(this.state.isLoading) {
-        console.log('getMetaData: ', this.DataSearch);
-    }
 
     return(
       <Container>
@@ -193,7 +210,9 @@ search() {
             <View tabLabel='List Song' style={{flex: 1,height: 510}}>
                 {this.state.isLoading ? <Spinner size='large' style={styles.container}/> :
                   <View style={{flex: 1}}>
-                    <List  style={{flexDirection: 'column',flex: 1,}} dataArray={this.state.items} renderRow={(item) =>
+                    <List  style={{flexDirection: 'column',flex: 1,}}
+                        dataArray={this.state.items}
+                        renderRow={(item) =>
                           <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
                           <Thumbnail square size={83} source={{ uri: 'https://s-media-cache-ak0.pinimg.com/236x/72/66/d7/7266d7166fb04cfb52c3ab0fa47e3b78.jpg'}} />
                             <Text style={{fontWeight: 'bold', }}>
@@ -203,14 +222,14 @@ search() {
                         } />
                   </View>
                 }
-
-
             </View>
 
             <View tabLabel='Album'>
             </View>
+
             <View tabLabel='Singer'>
             </View>
+
           </ScrollableTabView>
         </Content>
       </Container>
