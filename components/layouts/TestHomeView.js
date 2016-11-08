@@ -27,14 +27,13 @@ var RNFS = require('react-native-fs');
 import MediaMeta from 'react-native-media-meta';
 var DATA = new Array();
 var MetaData = new Array();
-var NewData = new Array();
+var NewData=[] ;
 var myThumb;
+
 class TestHomeView extends Component {
-
-
   constructor(props) {
     super(props);
-    console.log('navigator',navigator);
+    var self = this;
     this.arrtest = '';
     this.state = {
       items: [],
@@ -44,14 +43,60 @@ class TestHomeView extends Component {
       search: '',
     };
     this.loadData(function(m_DATA){});
+    //this._setNewData(m_NewData)=::this.setNewData(m_NewData);
+
+  }
+
+  setNewData=(m_NewData)=> {
+    //console.log("Trumngbb_ setNewData",m_NewData);
+    console.log('m_NewDataasdasdasd: ', m_NewData);
+
+    var {albumName, artist, title, thumb} = m_NewData;
+
+    //console.log('m_NewData: ', m_NewData);
+
+    if(m_NewData.albumName == null) {
+      albumName = 'albumName';
+    }
+    if(m_NewData.artist == null) {
+      artist = 'artist';
+    }
+    if(m_NewData.title == null) {
+      title = 'title';
+    }
+    if(m_NewData.thumb == null) {
+      thumb = 'thumb';
+    }
+    //console.log('DATADATA ',DATA);
+
+      for (let objData of DATA) {
+        objData.title = title;
+        objData.artist = artist;
+        objData.albumName = albumName;
+        objData.thumb = thumb;
+
+      }
+
+// mySong = DATA[i];
+//       mySong.title = title;
+//       mySong.artist = artist;
+//       mySong.albumName = albumName;
+//       mySong.thumb = thumb;
+
+    // for (let objData of DATA) {
+    //
+    // console.log('objData :  ',objData);
+    // }
+
+      //NewData.push(item);
   }
 
   // load data from Bundle
   loadData(callback){
-   RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
-    .then((result) => {
+      RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
+      .then((result) => {
       // Load file and push into array DATA
-      console.log('MainBundlePath ',result);
+      // console.log('MainBundlePath ',result);
       for (var i = 0; i < result.length; i++) {
         var arr = async(url) => {
           try {
@@ -80,32 +125,18 @@ class TestHomeView extends Component {
       //   })
       // }
 
-
-      for (var i = 0; i < MetaData.length; i++) {
-          MetaData[i].then(function(metaResult) {
-            metaResult['path']= DATA[i].path;
-            metaResult['name']= DATA[i].name;
-              NewData.push(metaResult);
-
+      for ( i= 0; i < MetaData.length; i++) {
+        //MetaData[i].then(function(metaResult){
+        MetaData[i].then((metaResult)=>{
+          //console.log("i=======" , metaResult.title );
+           this.setNewData(metaResult);
           });
       }
-
-      for (var i = 0; i < NewData.length; i++) {
-
-
-      }
-
-      console.log('NewData: '+NewData);
-
-
-
-
-
+        //console.log('NewData', NewData);
 
       callback(DATA);
       this.setState({
         items:  DATA,
-        metaTag: DATA.metaTag,
         isLoading: false
       });
     })
@@ -113,10 +144,6 @@ class TestHomeView extends Component {
       console.log(err.message, err.code);
       return false;
     });
-  }
-
-  getMetaData() {
-
   }
 
   setModalVisible(item) {
@@ -160,7 +187,6 @@ search() {
       // // song.metaObj
       var keySearch = this.state.search.toLowerCase();
       var keyName = DATA[i].name.toLowerCase();
-
 
       if(keyName.indexOf(keySearch)!==-1) {
         console.log('=== Tim duoc roi ====',);
@@ -214,7 +240,9 @@ search() {
                         dataArray={this.state.items}
                         renderRow={(item) =>
                           <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
-                          <Thumbnail square size={83} source={{ uri: 'https://s-media-cache-ak0.pinimg.com/236x/72/66/d7/7266d7166fb04cfb52c3ab0fa47e3b78.jpg'}} />
+
+                              <Thumbnail square size={83} source={{  uri: 'data:image/png;base64,' + item.thumb}} />
+
                             <Text style={{fontWeight: 'bold', }}>
                               {item.name}
                             </Text>
@@ -224,10 +252,42 @@ search() {
                 }
             </View>
 
-            <View tabLabel='Album'>
+            <View tabLabel='Album' style={{flex: 1,height: 510}}>
+              {this.state.isLoading ? <Spinner size='large' style={styles.container}/> :
+                <View style={{flex: 1}}>
+                  <List  style={{flexDirection: 'column',flex: 1,}}
+                      dataArray={this.state.items}
+                      renderRow={(item) =>
+                        <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
+
+                            <Thumbnail square size={83} source={{  uri: 'data:image/png;base64,' + item.thumb}} />
+
+                          <Text style={{fontWeight: 'bold', }}>
+                            {item.albumName}
+                          </Text>
+                        </ListItem>
+                      } />
+                </View>
+              }
             </View>
 
-            <View tabLabel='Singer'>
+            <View tabLabel='Singer' style={{flex: 1,height: 510}}>
+              {this.state.isLoading ? <Spinner size='large' style={styles.container}/> :
+                <View style={{flex: 1}}>
+                  <List  style={{flexDirection: 'column',flex: 1,}}
+                      dataArray={this.state.items}
+                      renderRow={(item) =>
+                        <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
+
+                            <Thumbnail square size={83} source={{  uri: 'data:image/png;base64,' + item.thumb}} />
+
+                          <Text style={{fontWeight: 'bold', }}>
+                            {item.artist}
+                          </Text>
+                        </ListItem>
+                      } />
+                </View>
+              }
             </View>
 
           </ScrollableTabView>

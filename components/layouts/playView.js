@@ -65,7 +65,7 @@ class PlayView extends Component {
       // songPath: songPath,
       songTitle: playList[indexSong].name,
       songPath: playList[indexSong].path,
-      //value: 0,
+      thumb: playList[indexSong].thumb,
       currentTime: 0,
       duration: 0,
       repeatIcon: require('../../img/icon/repeatAllIcon.png'),
@@ -301,7 +301,7 @@ class PlayView extends Component {
                 </Text>
               </View>
               <View style={styles.imgPlayView}>
-                <Image source={require('../../img/cogi.jpg')} style={styles.image}/>
+                <Image source={{  uri: 'data:image/png;base64,' + playList[indexSong].thumb}} style={styles.image}/>
               </View>
 
               <View style={styles.mediaView}>
