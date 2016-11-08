@@ -1,7 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
-const styles = require('../styles.js')
+const styles = require('../styles.js');
+const imgDefault  = require('../imgDefault.js');
 const { StyleSheet, Text, View,Alert} = ReactNative;
 import {
   Container,
@@ -47,50 +48,6 @@ class TestHomeView extends Component {
 
   }
 
-  setNewData=(m_NewData)=> {
-    //console.log("Trumngbb_ setNewData",m_NewData);
-    console.log('m_NewDataasdasdasd: ', m_NewData);
-
-    var {albumName, artist, title, thumb} = m_NewData;
-
-    //console.log('m_NewData: ', m_NewData);
-
-    if(m_NewData.albumName == null) {
-      albumName = 'albumName';
-    }
-    if(m_NewData.artist == null) {
-      artist = 'artist';
-    }
-    if(m_NewData.title == null) {
-      title = 'title';
-    }
-    if(m_NewData.thumb == null) {
-      thumb = 'thumb';
-    }
-    //console.log('DATADATA ',DATA);
-
-      for (let objData of DATA) {
-        objData.title = title;
-        objData.artist = artist;
-        objData.albumName = albumName;
-        objData.thumb = thumb;
-
-      }
-
-// mySong = DATA[i];
-//       mySong.title = title;
-//       mySong.artist = artist;
-//       mySong.albumName = albumName;
-//       mySong.thumb = thumb;
-
-    // for (let objData of DATA) {
-    //
-    // console.log('objData :  ',objData);
-    // }
-
-      //NewData.push(item);
-  }
-
   // load data from Bundle
   loadData(callback){
       RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
@@ -98,15 +55,26 @@ class TestHomeView extends Component {
       // Load file and push into array DATA
       // console.log('MainBundlePath ',result);
       for (var i = 0; i < result.length; i++) {
-        var arr = async(url) => {
+        var arr = async(url,i) => {
           try {
-             return await MediaMeta.get(url);
+             var tmpRe= await MediaMeta.get(url);
+             tmpRe["id"]=i;
+             return tmpRe;
           } catch (e) {
             console.error('error: ', e);
             return ;
           }
         };
-        MetaData.push(arr(result[i].path));
+        MetaData.push(arr(result[i].path,i));
+        // arr(result[i].path,i).then( (tmpPromise) => {
+        //   //  tmpPromise["i"] = i;
+        //    console.log("i ===== ", tmpPromise);
+        //    MetaData.push(tmpPromise);
+        // });
+        result[i]['title']='';
+        result[i]['artist'] = '';
+        result[i]['albumName'] = '';
+        result[i]['thumb'] = 'thumb';
         DATA.push(result[i]);
       }
       console.log('DATA: ', DATA);
@@ -127,13 +95,14 @@ class TestHomeView extends Component {
 
       for ( i= 0; i < MetaData.length; i++) {
         //MetaData[i].then(function(metaResult){
+        //console.log('MetaData=======',MetaData[i]);
+        console.log(' vo ne ');
         MetaData[i].then((metaResult)=>{
-          //console.log("i=======" , metaResult.title );
+          // console.log("i=======" , metaResult );
            this.setNewData(metaResult);
           });
       }
         //console.log('NewData', NewData);
-
       callback(DATA);
       this.setState({
         items:  DATA,
@@ -144,6 +113,51 @@ class TestHomeView extends Component {
       console.log(err.message, err.code);
       return false;
     });
+  }
+
+  setNewData=(m_NewData)=> {
+    //console.log("Trumngbb_ setNewData",m_NewData);
+    // console.log('m_NewDataasdasdasd: ', m_NewData);
+
+    var {albumName, artist, title, thumb} = m_NewData;
+    console.log("albumName========:   ", m_NewData);
+    //console.log('m_NewData: ', m_NewData);
+
+    if(m_NewData.albumName == null) {
+      albumName = 'albumName';
+    }
+    if(m_NewData.artist == null) {
+      artist = 'artist';
+    }
+    if(m_NewData.title == null) {
+      title = 'title';
+    }
+    if(m_NewData.thumb == null) {
+      // thumb = '../imgDefault.js';
+      thumb = imgDefault.imgDefault;
+    }
+
+
+    // for (let objData of DATA) {
+    //   objData.title = title;
+    //   objData.artist = artist;
+    //   objData.albumName = albumName;
+    //   objData.thumb = thumb;
+    //
+    // }
+    // console.log("zzzzzzzzzzzzzzz"+ DATA);
+    DATA[m_NewData.id].title=title;
+    DATA[m_NewData.id].artist = artist;
+    DATA[m_NewData.id].albumName = albumName;
+    DATA[m_NewData.id].thumb = thumb;
+
+
+    // for (let objData of DATA) {
+    //
+    // console.log('objData :  ',objData);
+    // }
+
+      //NewData.push(item);
   }
 
   setModalVisible(item) {
@@ -167,56 +181,55 @@ class TestHomeView extends Component {
       });
   }
 
-search() {
-  this.setState({
-    isLoading: true,
-  });
-  console.log('search:  ', this.state.search);
-///asdasdas
-  if(this.state.search !== '') {
-    for (var i = 0; i < DATA.length; i++) {
-      // var song=this.state.items[i];
-      // var myMeta = song.metaTag;
-      //
-      // song.metaTag.then(function(value){
-      //    myThumb = value.thumb;
-      // });
-      //
-      // console.log("==Thumb==");
-      // console.log(myThumb);
-      // // song.metaObj
-      var keySearch = this.state.search.toLowerCase();
-      var keyName = DATA[i].name.toLowerCase();
-
-      if(keyName.indexOf(keySearch)!==-1) {
-        console.log('=== Tim duoc roi ====',);
-        console.log( DATA[i].name);
-        DataSearch.push(DATA[i]);
-        this.setState({
-          items: DataSearch,
-          isLoading: false
-        });
-      } else {
-        Alert.alert('Error','The song does not exist');
-        this.setState({
-          items:  DATA,
-          isLoading: false
-        });
-        break;
-      }
-    }
-
-  } else {
+  search() {
     this.setState({
-      items:  DATA,
-      isLoading: false
+      isLoading: true,
     });
+    console.log('search:  ', this.state.search);
+  ///asdasdas
+    if(this.state.search !== '') {
+      for (var i = 0; i < DATA.length; i++) {
+        // var song=this.state.items[i];
+        // var myMeta = song.metaTag;
+        //
+        // song.metaTag.then(function(value){
+        //    myThumb = value.thumb;
+        // });
+        //
+        // console.log("==Thumb==");
+        // console.log(myThumb);
+        // // song.metaObj
+        var keySearch = this.state.search.toLowerCase();
+        var keyName = DATA[i].name.toLowerCase();
+
+        if(keyName.indexOf(keySearch)!==-1) {
+          console.log('=== Tim duoc roi ====',);
+          console.log( DATA[i].name);
+          DataSearch.push(DATA[i]);
+          this.setState({
+            items: DataSearch,
+            isLoading: false
+          });
+        } else {
+          Alert.alert('Error','The song does not exist');
+          this.setState({
+            items:  DATA,
+            isLoading: false
+          });
+          break;
+        }
+      }
+
+    } else {
+      this.setState({
+        items:  DATA,
+        isLoading: false
+      });
+    }
   }
-}
 
 
   render() {
-
     return(
       <Container>
         <Header>
