@@ -2,8 +2,6 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 const styles = require('../styles.js');
-// var ImgDefault  = require('../imgDefault') ;
-// var ImgDefault = require('../imgDefalt.js');
 import CONSTANTS from '../constants';
 const { StyleSheet, Text, View,Alert} = ReactNative;
 import {
@@ -46,8 +44,6 @@ class TestHomeView extends Component {
       search: '',
     };
     this.loadData(function(m_DATA){});
-    //this._setNewData(m_NewData)=::this.setNewData(m_NewData);
-console.log('========== ',CONSTANTS.IMAGE.Image);
   }
 
   // load data from Bundle
@@ -55,11 +51,12 @@ console.log('========== ',CONSTANTS.IMAGE.Image);
       RNFS.readDir(RNFS.MainBundlePath + '/mp3files')
       .then((result) => {
       // Load file and push into array DATA
-      // console.log('MainBundlePath ',result);
       for (var i = 0; i < result.length; i++) {
         var arr = async(url,i) => {
           try {
+            // get metadata in song
              var tmpRe= await MediaMeta.get(url);
+             // add element id to tmpRe
              tmpRe["id"]=i;
              return tmpRe;
           } catch (e) {
@@ -67,45 +64,28 @@ console.log('========== ',CONSTANTS.IMAGE.Image);
             return ;
           }
         };
+        // push MetaData to new array
         MetaData.push(arr(result[i].path,i));
-        // arr(result[i].path,i).then( (tmpPromise) => {
-        //   //  tmpPromise["i"] = i;
-        //    console.log("i ===== ", tmpPromise);
-        //    MetaData.push(tmpPromise);
-        // });
         result[i]['title']='';
         result[i]['artist'] = '';
         result[i]['albumName'] = '';
         result[i]['thumb'] = '';
+
+        // push result to array DATA
         DATA.push(result[i]);
       }
       console.log('DATA: ', DATA);
       console.log('MetaData: ', MetaData);
-      // cho get data
-      // DATA[1].metaObj.then(function(test){
-      //     console.log('albumName: ', test.artist);
-      // })
-      //console.log('albumName: ', DATA[0].metaObj);
-
-      // for (var i = 0 ; i < DATA.length ; i++) {
-      //    DATA[i].metaTag.then(function(test){
-      //        console.log('albumName: ', test);
-      //       //DATA[i].push(test);
-      //       //DataSearch.push(test);
-      //   })
-      // }
 
       for ( i= 0; i < MetaData.length; i++) {
         //MetaData[i].then(function(metaResult){
-        //console.log('MetaData=======',MetaData[i]);
-        console.log(' vo ne ');
         MetaData[i].then((metaResult)=>{
-          // console.log("i=======" , metaResult );
            this.setNewData(metaResult);
           });
       }
-        //console.log('NewData', NewData);
       callback(DATA);
+
+      // set DATA to items in state
       this.setState({
         items:  DATA,
         isLoading: false
@@ -117,14 +97,15 @@ console.log('========== ',CONSTANTS.IMAGE.Image);
     });
   }
 
+  /*
+    Function setNewData to DATA
+  */
+
   setNewData=(m_NewData)=> {
-    //console.log("Trumngbb_ setNewData",m_NewData);
-    // console.log('m_NewDataasdasdasd: ', m_NewData);
-
+    // get data to m_NewData
     var {albumName, artist, title, thumb} = m_NewData;
-    console.log("albumName========:   ", m_NewData);
-    //console.log('m_NewData: ', m_NewData);
 
+    // Check data in m_NewData
     if(m_NewData.albumName == null) {
       albumName = 'albumName';
     }
@@ -136,77 +117,44 @@ console.log('========== ',CONSTANTS.IMAGE.Image);
     }
     if(m_NewData.thumb == null) {
        thumb = CONSTANTS.IMAGE.Image;
-      // thumb = ImgDefault;
     }
 
-
-    // for (let objData of DATA) {
-    //   objData.title = title;
-    //   objData.artist = artist;
-    //   objData.albumName = albumName;
-    //   objData.thumb = thumb;
-    //
-    // }
-    // console.log("zzzzzzzzzzzzzzz"+ DATA);
+    // modify data from m_NewData to DATA
     DATA[m_NewData.id].title=title;
     DATA[m_NewData.id].artist = artist;
     DATA[m_NewData.id].albumName = albumName;
     DATA[m_NewData.id].thumb = thumb;
-
-
-    // for (let objData of DATA) {
-    //
-    // console.log('objData :  ',objData);
-    // }
-
-      //NewData.push(item);
   }
 
+  /*
+    Function setModalVisible item
+  */
   setModalVisible(item) {
-    //  console.log('visible',visible);
-    //console.log('name: ', item.name);
     var name= item.name;
     var indexSong = DATA.findIndex(item => item.name == name);
-
-      //console.log('item',DATA.findIndex(item => item.name == name));
-      //console.log('All Item: ', DATA.length);
-
-      //this.pushData(item);
-      //console.log('DATA: ',this.state.items);
-      this.props.navigator.push({
-        id:'PlayView',
-        passProps:{
-          items: DATA,
-          indexSong: indexSong,
-          isPlaying: true
-        },
-      });
+    this.props.navigator.push({
+      id:'PlayView',
+      passProps:{
+        items: DATA,
+        indexSong: indexSong,
+        isPlaying: true
+      },
+    });
   }
-
+  /*
+    Function Search
+  */
   search() {
     this.setState({
       isLoading: true,
     });
     console.log('search:  ', this.state.search);
-  ///asdasdas
     if(this.state.search !== '') {
       for (var i = 0; i < DATA.length; i++) {
-        // var song=this.state.items[i];
-        // var myMeta = song.metaTag;
-        //
-        // song.metaTag.then(function(value){
-        //    myThumb = value.thumb;
-        // });
-        //
-        // console.log("==Thumb==");
-        // console.log(myThumb);
-        // // song.metaObj
         var keySearch = this.state.search.toLowerCase();
         var keyName = DATA[i].name.toLowerCase();
 
         if(keyName.indexOf(keySearch)!==-1) {
-          console.log('=== Tim duoc roi ====',);
-          console.log( DATA[i].name);
           DataSearch.push(DATA[i]);
           this.setState({
             items: DataSearch,
