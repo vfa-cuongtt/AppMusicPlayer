@@ -2,7 +2,9 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
 const styles = require('../styles.js');
-const imgDefault  = require('../imgDefault.js');
+// var ImgDefault  = require('../imgDefault') ;
+// var ImgDefault = require('../imgDefalt.js');
+import CONSTANTS from '../constants';
 const { StyleSheet, Text, View,Alert} = ReactNative;
 import {
   Container,
@@ -45,7 +47,7 @@ class TestHomeView extends Component {
     };
     this.loadData(function(m_DATA){});
     //this._setNewData(m_NewData)=::this.setNewData(m_NewData);
-
+console.log('========== ',CONSTANTS.IMAGE.Image);
   }
 
   // load data from Bundle
@@ -74,7 +76,7 @@ class TestHomeView extends Component {
         result[i]['title']='';
         result[i]['artist'] = '';
         result[i]['albumName'] = '';
-        result[i]['thumb'] = 'thumb';
+        result[i]['thumb'] = '';
         DATA.push(result[i]);
       }
       console.log('DATA: ', DATA);
@@ -133,8 +135,8 @@ class TestHomeView extends Component {
       title = 'title';
     }
     if(m_NewData.thumb == null) {
-      // thumb = '../imgDefault.js';
-      thumb = imgDefault.imgDefault;
+       thumb = CONSTANTS.IMAGE.Image;
+      // thumb = ImgDefault;
     }
 
 
@@ -249,7 +251,7 @@ class TestHomeView extends Component {
             <View tabLabel='List Song' style={{flex: 1,height: 510}}>
                 {this.state.isLoading ? <Spinner size='large' style={styles.container}/> :
                   <View style={{flex: 1}}>
-                    <List  style={{flexDirection: 'column',flex: 1,}}
+                    <List style={{flexDirection: 'column',flex: 1,}}
                         dataArray={this.state.items}
                         renderRow={(item) =>
                           <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
@@ -268,7 +270,7 @@ class TestHomeView extends Component {
             <View tabLabel='Album' style={{flex: 1,height: 510}}>
               {this.state.isLoading ? <Spinner size='large' style={styles.container}/> :
                 <View style={{flex: 1}}>
-                  <List  style={{flexDirection: 'column',flex: 1,}}
+                  <List style={{flexDirection: 'column',flex: 1,}}
                       dataArray={this.state.items}
                       renderRow={(item) =>
                         <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
@@ -287,7 +289,7 @@ class TestHomeView extends Component {
             <View tabLabel='Singer' style={{flex: 1,height: 510}}>
               {this.state.isLoading ? <Spinner size='large' style={styles.container}/> :
                 <View style={{flex: 1}}>
-                  <List  style={{flexDirection: 'column',flex: 1,}}
+                  <List style={{flexDirection: 'column',flex: 1,}}
                       dataArray={this.state.items}
                       renderRow={(item) =>
                         <ListItem button onPress={this.setModalVisible.bind(this, item)} style={{flex:1,}} >
