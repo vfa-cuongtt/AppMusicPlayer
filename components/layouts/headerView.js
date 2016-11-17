@@ -41,14 +41,12 @@ class HeaderView extends Component {
         <Content>
           <SearchView />
           <ScrollableTabView >
-
-                  <ListItemView tabLabel='List Song' style={{flex:1}}/>
-
-              <View tabLabel='Album'>
-              </View>
-              <View tabLabel='Singer'>
-              </View>
-          </ScrollableTabView>
+              <ListItemView tabLabel='List Song' style={{flex:1}}/>
+            <View tabLabel='Album'>
+            </View>
+            <View tabLabel='Singer'>
+            </View>
+        </ScrollableTabView>
         </Content>
       </Container>
     );

@@ -39,19 +39,13 @@ var enumRandom = 'random';
 var enumRepeatOne = 'repeatOne';
 var enumRepeatAll = 'repeatAll';
 var enumKey;
-
 var indexSong;
 var nextSong;
 var allSong;
+
 class PlayView extends Component {
   constructor(props) {
     super(props);
-    //console.log('play View', this.props.songObject.name);
-
-    // songTitle = this.props.listDATA[this.props.indexSong].name;
-    // songPath = this.props.listDATA[this.props.indexSong].path;
-    // Test start
-
     playList = this.props.items;
     indexSong = this.props.indexSong;
 
@@ -61,8 +55,6 @@ class PlayView extends Component {
     //Test end
     //console.log('path: ', playList[indexSong].path);
     this.state={
-      // songTitle: songTitle,
-      // songPath: songPath,
       songTitle: playList[indexSong].name,
       songPath: playList[indexSong].path,
       thumb: playList[indexSong].thumb,
@@ -80,8 +72,9 @@ class PlayView extends Component {
     }
   }
 
-
-
+  /*
+    Function: loadSound
+  */
   loadSound(songPath) {
     mp3 = new Sound(songPath ,'', (error) => {
       if(error) {
@@ -96,7 +89,9 @@ class PlayView extends Component {
     });
   }
 
-  //Check Enum
+  /*
+    Function: checkPlay
+  */
   checkPlay() {
     switch (enumKey) {
       case 'rewind':
@@ -121,6 +116,9 @@ class PlayView extends Component {
     }
   }
 
+  /*
+    Function: playMp3
+  */
   playMp3() {
     //mp3.setCurrentTime();
     console.log('duration: ', this.state.duration);
@@ -162,13 +160,19 @@ class PlayView extends Component {
   isPlaying = false;
 }
 
+  /*
+    Function: Navigator Back View
+  */
   navBackView() {
     mp3.stop();
     this.props.navigator.pop({
       id:'HomeView',
     })
   }
-    // Function: Play Song
+
+  /*
+    Function: Play Song
+  */
   playSong() {
     console.log('play');
     enumKey = enumPlay;
@@ -215,7 +219,9 @@ class PlayView extends Component {
       // }
     }
 
-  //Function: Repeat Song
+  /*
+    Function: Repeat Song
+  */
   repeatSong() {
     console.log('repeat');
     if(repeat) {
@@ -234,8 +240,9 @@ class PlayView extends Component {
       });
     }
   }
-
-  // Function: Rewind Song
+  /*
+   Function: Rewind Song
+  */
   rewindSong() {
     enumKey = enumRewind;
     indexSong = indexSong - 1;
@@ -253,7 +260,9 @@ class PlayView extends Component {
     this.loadSound(playList[indexSong].path);
   }
 
-  // Function: Next Song
+  /*
+   Function: Next Song
+  */
   nextSong() {
     enumKey = enumNext;
     indexSong = indexSong + 1;
@@ -270,7 +279,9 @@ class PlayView extends Component {
     this.loadSound(playList[indexSong].path);
   }
 
-  // Function: Random Song
+  /*
+   Function: Random Song
+  */
   randomSong() {
     enumKey = enumRandom;
     indexSong = Math.floor(Math.random() * allSong);

@@ -1,8 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
-const styles = require('../styles.js');
 import CONSTANTS from '../constants';
+import MediaMeta from 'react-native-media-meta';
 const { StyleSheet, Text, View,Alert} = ReactNative;
 import {
   Container,
@@ -25,8 +25,9 @@ import ScrollableTabView, {ScrollableTabBar } from 'react-native-scrollable-tab-
 var ListItemView = require('./listView.js');
 var SearchView = require('./searchView.js');
 var RNFS = require('react-native-fs');
-import MediaMeta from 'react-native-media-meta';
-var DATA = new Array();
+const styles = require('../styles.js');
+
+var Data = new Array();
 var MetaData = new Array();
 var DataSearch = new Array();
 var flagHolder = new Array();
@@ -46,8 +47,6 @@ class TestHomeView extends Component {
       search: '',
     };
     this.loadData(/*function(m_DATA){}*/);
-
-
   }
 
   // load data from Bundle
@@ -76,9 +75,9 @@ class TestHomeView extends Component {
         result[i]['thumb'] = '';
 
         // push result to array DATA
-        DATA.push(result[i]);
+        Data.push(result[i]);
       }
-      console.log('DATA: ', DATA);
+      console.log('DATA: ', Data);
       console.log('MetaData: ', MetaData);
 
       for ( i= 0; i < MetaData.length; i++) {
@@ -86,7 +85,6 @@ class TestHomeView extends Component {
         MetaData[i].then((metaResult)=>{
            this.setNewData(metaResult,flagHolder,MetaData.length);
           });
-//day
       }
       // callback(DATA);
 
@@ -100,13 +98,11 @@ class TestHomeView extends Component {
       console.log(err.message, err.code);
       return false;
     });
-
   }
 
   /*
-    Function setNewData to DATA
+    Function: setNewData to DATA
   */
-
   setNewData=(m_NewData,fH,arraySize)=> {
     // get data to m_NewData
     var {albumName, artist, title, thumb} = m_NewData;
@@ -126,42 +122,37 @@ class TestHomeView extends Component {
     }
 
     // modify data from m_NewData to DATA
-    DATA[m_NewData.id].title=title;
-    DATA[m_NewData.id].artist = artist;
-    DATA[m_NewData.id].albumName = albumName;
-    DATA[m_NewData.id].thumb = thumb;
+    Data[m_NewData.id].title=title;
+    Data[m_NewData.id].artist = artist;
+    Data[m_NewData.id].albumName = albumName;
+    Data[m_NewData.id].thumb = thumb;
 
     fH.push(true);
-    console.log("arraySize: "+ arraySize);
-    console.log("current fH: "+ fH.length);
-
     if(fH.length==arraySize){
-      console.log("RenderRenderRenderRenderRenderRenderRenderRenderRender");
       this.setState({
-          items:  DATA,
+          items:  Data,
           isLoading: false
       });
     }
-
   }
 
   /*
-    Function setModalVisible item
+    Function: setModalVisible item
   */
   setModalVisible(item) {
     var name= item.name;
-    var indexSong = DATA.findIndex(item => item.name == name);
+    var indexSong = Data.findIndex(item => item.name == name);
     this.props.navigator.push({
       id:'PlayView',
       passProps:{
-        items: DATA,
+        items: Data,
         indexSong: indexSong,
         isPlaying: true
       },
     });
   }
   /*
-    Function Search
+    Function: Search
   */
   search() {
     DataSearch=new Array();
@@ -171,27 +162,14 @@ class TestHomeView extends Component {
     });
     console.log('search:  ', this.state.search);
     if(this.state.search !== '') {
-      for (var i = 0; i < DATA.length; i++) {
-        // var song=this.state.items[i];
-        // var myMeta = song.metaTag;
-        //
-        // song.metaTag.then(function(value){
-        //    myThumb = value.thumb;
-        // });
-        //
-        // console.log("==Thumb==");
-        // console.log(myThumb);
-        // // song.metaObj
+      for (var i = 0; i < Data.length; i++) {
         var keySearch = this.state.search.toLowerCase();
-        var songName = DATA[i].name.toLowerCase();
-        var albumName = DATA[i].albumName.toLowerCase();
-        var artist = DATA[i].artist.toLowerCase();
-        // console.log('keyName ==== ',DATA[i].name);
+        var songName = Data[i].name.toLowerCase();
+        var albumName = Data[i].albumName.toLowerCase();
+        var artist = Data[i].artist.toLowerCase();
 
           if((songName.indexOf(keySearch) !== -1) || (albumName.indexOf(keySearch) !== -1) || (artist.indexOf(keySearch) !== -1 )) {
-            // console.log('=== Tim duoc roi ====',);
-            // console.log( DATA[i].name);
-            DataSearch.push(DATA[i]);
+            DataSearch.push(Data[i]);
             this.setState({
               items: DataSearch,
               isLoading: false
@@ -203,21 +181,20 @@ class TestHomeView extends Component {
         if(searchStatus==false){
         Alert.alert('Error','The song does not exist');
         this.setState({
-          items:  DATA,
+          items:  Data,
           isLoading: false
         });
         }
     } else {
       this.setState({
-        items:  DATA,
+        items:  Data,
         isLoading: false
       });
     }
   }
 
-
   render() {
-var z = (
+    return(
       <Container>
         <Header>
           <Title>{this.props.title}</Title>
@@ -294,8 +271,6 @@ var z = (
         </Content>
       </Container>
     );
-
-    return z;
   }
 }
 module.exports = TestHomeView;

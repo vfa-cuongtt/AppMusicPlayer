@@ -17,7 +17,6 @@ import {
   ListItem,
   Thumbnail,
   ScrollView,
-
 } from 'native-base';
 //var ScrollableTabView = require('react-native-scrollable-tab-view');
 import ScrollableTabView, {ScrollableTabBar } from 'react-native-scrollable-tab-view';
